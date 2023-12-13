@@ -4,8 +4,6 @@ import contactsService from "../../models/contacts/index.js";
 import HttpErr from "../../helpers/HttpErr.js";
 import Joi from "joi";
 
-// console.log(contactsService);
-
 const contactsRouter = express.Router();
 
 const joiSchema = Joi.object({
@@ -64,7 +62,7 @@ contactsRouter.delete("/:contactId", async (req, res, next) => {
     const result = await contactsService.removeContact(contactId);
 
     if (!result) {
-      throw HttpError(404, "not found");
+      throw HttpErr(404, "not found");
     }
 
     res.json({ message: "success" });
@@ -84,15 +82,13 @@ contactsRouter.put("/:contactId", async (req, res, next) => {
     const result = await contactsService.updateContact(contactId, req.body);
 
     if (!result) {
-      throw HttpError(404, "not found");
+      throw HttpErr(404, "not found");
     }
 
-    res.join(result);
+    res.json(result);
   } catch (err) {
     next(err);
   }
-
-  res.json({ message: "template message" });
 });
 
 export default contactsRouter;
