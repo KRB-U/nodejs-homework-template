@@ -1,5 +1,9 @@
 import { HttpErr } from "../helpers/HttpErr.js";
 import contactsService from "../models/contacts/index.js";
+import {
+  contactAddScheme,
+  contactUpdScheme,
+} from "../schemes/contacts-schemes.js";
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -11,7 +15,7 @@ const getAllContacts = async (req, res, next) => {
   }
 };
 
-const getContactsById = async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const oneContact = await contactsService.getContactById(contactId);
@@ -28,14 +32,14 @@ const getContactsById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    // console.log(req);
-    const { error } = joiSchema.validate(req.body);
+    const { error } = contactAddScheme.validate(req.body);
 
     if (error) {
       throw HttpErr(400, error.message);
     }
 
     const addNewContact = await contactsService.addContact(req.body);
+
     res.status(201).json(addNewContact);
   } catch (err) {
     next(err);
@@ -43,7 +47,7 @@ const addContact = async (req, res, next) => {
   res.json();
 };
 
-const deletingContact = async (req, res, next) => {
+const removeContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
@@ -53,14 +57,14 @@ const deletingContact = async (req, res, next) => {
       throw HttpErr(404, "not found");
     }
 
-    res.json({ message: "success" });
+    res.json({ message: "contact deleted" });
   } catch (err) {}
   res.json({ message: "template message" });
 };
 
 const updContact = async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body);
+    const { error } = contactUpdScheme.validate(req.body);
 
     if (error) {
       throw HttpErr(400, error.message);
@@ -81,8 +85,8 @@ const updContact = async (req, res, next) => {
 
 export default {
   getAllContacts,
-  getContactsById,
+  getContactById,
   addContact,
-  deletingContact,
+  removeContact,
   updContact,
 };
