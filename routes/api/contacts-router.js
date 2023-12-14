@@ -1,8 +1,8 @@
 import express from "express";
 
-import contactsService from "../../models/contacts/index.js";
-import HttpErr from "../../helpers/HttpErr.js";
 import Joi from "joi";
+
+import contactsController from "../../controllers/contacts-controller.js";
 
 const contactsRouter = express.Router();
 
@@ -12,83 +12,14 @@ const joiSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-contactsRouter.get("/", async (req, res, next) => {
-  console.log(res);
-  try {
-    const result = await contactsService.listContacts();
+contactsRouter.get("/", contactsController.getAllContacts);
 
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
-});
+contactsRouter.get("/:contactId", contactsController.getContactsById);
 
-contactsRouter.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const oneContact = await contactsService.getContactById(contactId);
+contactsRouter.post("/", contactsController.addContact);
 
-    if (!oneContact) {
-      throw HttpErr(404, "not found");
-    }
+contactsRouter.delete("/:contactId", contactsController.deletingContact);
 
-    res.json(oneContact);
-  } catch (err) {
-    next(err);
-  }
-});
-
-contactsRouter.post("/", async (req, res, next) => {
-  try {
-    // console.log(req);
-    const { error } = joiSchema.validate(req.body);
-
-    if (error) {
-      throw HttpErr(400, error.message);
-    }
-
-    const addNewContact = await contactsService.addContact(req.body);
-    res.status(201).json(addNewContact);
-  } catch (err) {
-    next(err);
-  }
-  res.json();
-});
-
-contactsRouter.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-
-    const result = await contactsService.removeContact(contactId);
-
-    if (!result) {
-      throw HttpErr(404, "not found");
-    }
-
-    res.json({ message: "success" });
-  } catch (err) {}
-  res.json({ message: "template message" });
-});
-
-contactsRouter.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = joiSchema.validate(req.body);
-
-    if (error) {
-      throw HttpErr(400, error.message);
-    }
-
-    const { contactId } = req.params;
-    const result = await contactsService.updateContact(contactId, req.body);
-
-    if (!result) {
-      throw HttpErr(404, "not found");
-    }
-
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
-});
+contactsRouter.put("/:contactId", contactsController.updContact);
 
 export default contactsRouter;

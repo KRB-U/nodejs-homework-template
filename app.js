@@ -3,8 +3,6 @@ import logger from "morgan";
 import cors from "cors";
 
 import contactsRouter from "./routes/api/contacts-router.js";
-// import { contactsPath } from "./models/contacts/index.js";
-// console.log(contactsPath);
 
 const app = express();
 

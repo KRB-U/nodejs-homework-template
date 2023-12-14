@@ -1,7 +1,5 @@
-const HttpErr = (status, message) => {
+export const HttpErr = (status, message) => {
   const err = new Error(message);
   err.status = status;
   return err;
 };
-
-export default HttpErr;
