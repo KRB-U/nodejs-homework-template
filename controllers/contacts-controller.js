@@ -17,7 +17,7 @@ const addContact = async (req, res) => {
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const oneContact = await Contact.findOne(contactId);
+  const oneContact = await Contact.findById(contactId);
 
   if (!oneContact) {
     throw HttpErr(404, `contacts with ID ${contactId} not found`); //return
