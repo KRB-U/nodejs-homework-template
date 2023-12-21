@@ -1,5 +1,5 @@
 import { HttpErr } from "../helpers/HttpErr.js";
-import contactsService from "../models/contacts/index.js";
+import contactsService from "../services/services.js";
 import {
   contactAddScheme,
   contactUpdScheme,
@@ -44,7 +44,7 @@ const addContact = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  res.json();
+  // res.json();
 };
 
 const removeContact = async (req, res, next) => {
@@ -58,7 +58,9 @@ const removeContact = async (req, res, next) => {
     }
 
     res.json({ message: "contact deleted" });
-  } catch (err) {}
+  } catch (err) {
+    next(err);
+  }
   res.json({ message: "template message" });
 };
 
