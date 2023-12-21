@@ -10,7 +10,7 @@ import Contact from "../models/contacts/Contact.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find({}, "phone name");
+  const result = await Contact.find({});
 
   res.json(result);
 };
