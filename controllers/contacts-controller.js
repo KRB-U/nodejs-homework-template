@@ -15,7 +15,7 @@ const addContact = async (req, res) => {
   res.status(201).json(addNewContact);
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params;
   const oneContact = await Contact.findById(contactId);
 
@@ -26,7 +26,7 @@ const getContactById = async (req, res, next) => {
   res.json(oneContact);
 };
 
-const removeContact = async (req, res, next) => {
+const removeContact = async (req, res) => {
   const { contactId } = req.params;
 
   const result = await Contact.findByIdAndDelete(contactId);
@@ -39,6 +39,18 @@ const removeContact = async (req, res, next) => {
 };
 
 const updContact = async (req, res) => {
+  const { contactId } = req.params;
+
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+
+  if (!result) {
+    throw HttpErr(404, "not found");
+  }
+
+  res.json(result);
+};
+
+const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body);
 
@@ -55,4 +67,5 @@ export default {
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updContact: ctrlWrapper(updContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };

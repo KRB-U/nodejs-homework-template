@@ -10,6 +10,7 @@ import {
   contactUpdScheme,
   contactUpdateFavoriteSchema,
 } from "../../schemes/contacts-schemes.js";
+import { isEmptyFavorite } from "../../middleWares/isEmptyFavorite.js";
 
 // import { isEmptyBody } from "../../middleWares/index.js";
 
@@ -41,7 +42,8 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:contactId/favorite",
   isValidId,
+  isEmptyFavorite,
   validateBody(contactUpdateFavoriteSchema),
-  contactsController.updContact
+  contactsController.updateStatusContact
 );
 export default contactsRouter;
