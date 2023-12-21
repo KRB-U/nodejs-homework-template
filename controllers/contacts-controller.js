@@ -44,7 +44,7 @@ const addContact = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  res.json();
+  // res.json();
 };
 
 const removeContact = async (req, res, next) => {
