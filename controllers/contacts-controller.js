@@ -1,16 +1,10 @@
 import { HttpErr } from "../helpers/HttpErr.js";
-// import contactsService from "../services/services.js";
-
-// import {
-//   contactAddScheme,
-//   contactUpdScheme,
-// } from "../schemes/contacts-schemes.js";
 
 import Contact from "../models/contacts/Contact.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find({});
+  const result = await Contact.find();
 
   res.json(result);
 };
@@ -23,7 +17,7 @@ const addContact = async (req, res) => {
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const oneContact = await contactsService.getContactById(contactId);
+  const oneContact = await Contact.findOne(contactId);
 
   if (!oneContact) {
     throw HttpErr(404, `contacts with ID ${contactId} not found`); //return
