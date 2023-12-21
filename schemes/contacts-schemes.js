@@ -19,3 +19,7 @@ export const contactUpdScheme = Joi.object({
   email: Joi.string(),
   phone: Joi.string().pattern(phoneType),
 });
+
+export const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});

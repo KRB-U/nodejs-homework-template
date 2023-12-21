@@ -36,8 +36,6 @@ const removeContact = async (req, res, next) => {
   }
 
   res.json({ message: "contact deleted" });
-
-  // res.json({ message: "template message" });
 };
 
 const updContact = async (req, res) => {

@@ -8,6 +8,7 @@ import { isValidId } from "../../middleWares/isValidId.js";
 import {
   contactAddScheme,
   contactUpdScheme,
+  contactUpdateFavoriteSchema,
 } from "../../schemes/contacts-schemes.js";
 
 // import { isEmptyBody } from "../../middleWares/index.js";
@@ -24,13 +25,23 @@ contactsRouter.post(
   contactsController.addContact
 );
 
-// contactsRouter.delete("/:contactId", isValidId, contactsController.removeContact);
+contactsRouter.delete(
+  "/:contactId",
+  isValidId,
+  contactsController.removeContact
+);
 
 contactsRouter.put(
   "/:contactId",
   isValidId,
-  // validateBody(contactUpdScheme),
+  validateBody(contactUpdScheme),
   contactsController.updContact
 );
 
+contactsRouter.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(contactUpdateFavoriteSchema),
+  contactsController.updContact
+);
 export default contactsRouter;
