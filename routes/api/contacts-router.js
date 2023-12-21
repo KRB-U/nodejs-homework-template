@@ -44,6 +44,6 @@ contactsRouter.patch(
   isValidId,
   isEmptyFavorite,
   validateBody(contactUpdateFavoriteSchema),
-  contactsController.updContact
+  contactsController.updateStatusContact
 );
 export default contactsRouter;
