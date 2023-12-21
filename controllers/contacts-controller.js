@@ -10,30 +10,26 @@ import Contact from "../models/contacts/Contact.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({}, "phone name");
 
   res.json(result);
-};
-
-const getContactById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const oneContact = await contactsService.getContactById(contactId);
-
-    if (!oneContact) {
-      throw HttpErr(404, `contacts with ID ${contactId} not found`); //return
-    }
-
-    res.json(oneContact);
-  } catch (err) {
-    next(err);
-  }
 };
 
 const addContact = async (req, res) => {
   const addNewContact = await Contact.create(req.body);
 
   res.status(201).json(addNewContact);
+};
+
+const getContactById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const oneContact = await contactsService.getContactById(contactId);
+
+  if (!oneContact) {
+    throw HttpErr(404, `contacts with ID ${contactId} not found`); //return
+  }
+
+  res.json(oneContact);
 };
 
 const removeContact = async (req, res, next) => {
