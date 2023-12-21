@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { version } from "os";
-import { handleSaveError } from "./hooks.js";
+import { addUpdateSettings, handleSaveError } from "./hooks.js";
 
 export const phoneType = /^\(\d{3}\) \d{3}-\d{4}/;
 const contactSchema = new Schema(
@@ -25,6 +25,10 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleSaveError);
+
+contactSchema.pre("findOneAndUpdate", addUpdateSettings);
+
+contactSchema.post("findOneAndUpdate", handleSaveError);
 
 const Contact = model("contact", contactSchema);
 export default Contact;
