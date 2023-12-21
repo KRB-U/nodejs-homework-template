@@ -1,12 +1,12 @@
 import { HttpErr } from "../helpers/HttpErr.js";
-import contactsService from "../services/services.js";
+// import contactsService from "../services/services.js";
 import {
   contactAddScheme,
   contactUpdScheme,
 } from "../schemes/contacts-schemes.js";
 
 import Contact from "../models/contacts/Contact.js";
-// console.log(Contact);
+
 const getAllContacts = async (req, res, next) => {
   try {
     // const result = await contactsService.listContacts();
