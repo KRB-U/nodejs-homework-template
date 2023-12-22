@@ -10,7 +10,7 @@ import {
   contactUpdScheme,
   contactUpdateFavoriteSchema,
 } from "../../schemes/contacts-schemes.js";
-import { isEmptyFavorite } from "../../middleWares/isEmptyFavorite.js";
+// import { isEmptyFavorite } from "../../middleWares/isEmptyFavorite.js";
 
 // import { isEmptyBody } from "../../middleWares/index.js";
 
