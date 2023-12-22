@@ -42,7 +42,7 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:contactId/favorite",
   isValidId,
-  isEmptyFavorite,
+  // isEmptyFavorite,
   validateBody(contactUpdateFavoriteSchema),
   contactsController.updateStatusContact
 );
