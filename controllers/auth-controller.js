@@ -65,7 +65,10 @@ const signin = async (req, res) => {
 
   res.json({
     token: token,
-    user: { email },
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
 
