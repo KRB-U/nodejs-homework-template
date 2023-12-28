@@ -28,10 +28,13 @@ const signup = async (req, res, next) => {
     password: hashPassword,
   });
 
-  res.json({
+  const { email: emailCreatedNewUser, subscription } = newUser;
+  res.status(201).json({
     user: {
-      username: newUser.email,
+      //   username: newUser.email,
       //   password: newUser.password,
+      email: emailCreatedNewUser,
+      subscription,
     },
   });
   next();
