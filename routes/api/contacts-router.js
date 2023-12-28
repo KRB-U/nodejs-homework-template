@@ -3,16 +3,13 @@ import express from "express";
 import contactsController from "../../controllers/contacts-controller.js";
 
 import { validateBody } from "../../decorators/validateBody.js";
-import { isValidId } from "../../middleWares/isValidId.js";
+import { isEmptyBody, isValidId } from "../../middleWares/index.js";
 
 import {
   contactAddScheme,
   contactUpdScheme,
   contactUpdateFavoriteSchema,
 } from "../../schemes/contacts-schemes.js";
-// import { isEmptyFavorite } from "../../middleWares/isEmptyFavorite.js";
-
-// import { isEmptyBody } from "../../middleWares/index.js";
 
 const contactsRouter = express.Router();
 
