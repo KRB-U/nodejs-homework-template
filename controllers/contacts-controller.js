@@ -14,11 +14,14 @@ const getAllContacts = async (req, res) => {
     limit,
   }).populate("owner", "email");
 
-  // if (favorite) {
-  //   res.json();
-  // }
-
-  res.json(result);
+  if (favorite) {
+    const filteredContacts = result.filter(
+      (contact) => contact.favorite === true
+    );
+    res.json(filteredContacts);
+  } else {
+    res.json(result);
+  }
 };
 
 const addContact = async (req, res) => {
