@@ -3,7 +3,11 @@ import express from "express";
 import contactsController from "../../controllers/contacts-controller.js";
 
 import { validateBody } from "../../decorators/validateBody.js";
-import { isEmptyBody, isValidId } from "../../middleWares/index.js";
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+} from "../../middleWares/index.js";
 
 import {
   contactAddScheme,
@@ -12,6 +16,8 @@ import {
 } from "../../schemes/contacts-schemes.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAllContacts);
 
