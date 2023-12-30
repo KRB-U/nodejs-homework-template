@@ -61,6 +61,7 @@ const signin = async (req, res) => {
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+  await UserModel.findByIdAndUpdate(id, { token });
 
   res.json({
     token: token,
@@ -80,8 +81,16 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await UserModel.findByIdAndUpdate(_id, { token: "" });
+
+  res.json({});
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };

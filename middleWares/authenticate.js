@@ -25,7 +25,7 @@ export const authenticate = async (req, res, next) => {
 
     const user = await UserModel.findById(id);
 
-    if (!user) {
+    if (!user || !user.token || token !== user.token) {
       return next(HttpErr(401, "Not authorized"));
     }
 
