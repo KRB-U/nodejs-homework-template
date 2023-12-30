@@ -85,7 +85,7 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   await UserModel.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({});
+  res.status(204).json();
 };
 
 export default {

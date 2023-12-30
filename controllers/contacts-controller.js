@@ -18,10 +18,17 @@ const getAllContacts = async (req, res) => {
     const filteredContacts = result.filter(
       (contact) => contact.favorite === true
     );
+
     res.json(filteredContacts);
   } else {
     res.json(result);
   }
+
+  const response = {
+    contacts: result,
+    currentPage: page,
+    totalPages: Math.ceil(count / limit),
+  };
 };
 
 const addContact = async (req, res) => {
