@@ -14,15 +14,19 @@ const getAllContacts = async (req, res) => {
     limit,
   }).populate("owner", "email");
 
+  const totalCount = await Contact.countDocuments({ owner });
+
   if (favorite) {
     const filteredContacts = result.filter(
       (contact) => contact.favorite === true
     );
 
-    res.json(filteredContacts);
+    res.json({
+      favoriteContacts: filteredContacts,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+    });
   } else {
-    const totalCount = await Contact.countDocuments({ owner });
-
     res.json({
       contacts: result,
       currentPage: page,
