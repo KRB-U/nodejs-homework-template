@@ -21,14 +21,14 @@ const getAllContacts = async (req, res) => {
 
     res.json(filteredContacts);
   } else {
-    res.json(result);
-  }
+    const totalCount = await Contact.countDocuments({ owner });
 
-  const response = {
-    contacts: result,
-    currentPage: page,
-    totalPages: Math.ceil(count / limit),
-  };
+    res.json({
+      contacts: result,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+    });
+  }
 };
 
 const addContact = async (req, res) => {
