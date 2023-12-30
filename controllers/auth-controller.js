@@ -14,7 +14,6 @@ const saltUserSignUp = 10;
 
 const { JWT_SECRET } = process.env;
 
-// console.log(process.env);
 const signup = async (req, res) => {
   const { email, password } = req.body;
   const user = await UserModel.findOne({ email });
@@ -72,7 +71,17 @@ const signin = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
+  getCurrent: ctrlWrapper(getCurrent),
 };

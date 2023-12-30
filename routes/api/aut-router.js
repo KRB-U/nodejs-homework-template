@@ -1,6 +1,10 @@
 import express from "express";
 
-import { isEmptyBody, isValidId } from "../../middleWares/index.js";
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+} from "../../middleWares/index.js";
 
 import { validateBody } from "../../decorators/validateBody.js";
 
@@ -26,5 +30,7 @@ authRouter.post(
   validateBody(userSigninSchema),
   authController.signin
 );
+
+authRouter.get("/current", authenticate, authController.getCurrent);
 
 export default authRouter;
