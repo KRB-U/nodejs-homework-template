@@ -9,6 +9,12 @@ const getAllContacts = async (req, res) => {
   const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
 
+  // const query = { owner };
+
+  // if (favorite) {
+  //   query.favorite = favorite;
+  // }
+
   const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
     skip,
     limit,

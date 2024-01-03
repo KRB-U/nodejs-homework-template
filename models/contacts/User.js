@@ -4,7 +4,7 @@ import { addUpdateSettings, handleSaveError } from "./hooks.js";
 
 export const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-const userSchema = new Schema(
+export const userSchema = new Schema(
   {
     email: {
       type: String,

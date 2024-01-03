@@ -7,6 +7,7 @@ import { HttpErr } from "../helpers/HttpErr.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 import dotenv from "dotenv";
+import { userSchema } from "../models/contacts/User.js";
 
 dotenv.config();
 
@@ -88,9 +89,29 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateUserSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+
+  const validValueSubscr = userSchema.path("subscription").enumValues;
+
+  if (!validValueSubscr.includes(subscription)) {
+    throw HttpErr(400, "Invalid subscription value");
+  }
+
+  const user = await UserModel.findByIdAndUpdate(_id, { subscription });
+
+  if (!user) {
+    throw HttpErr(404, "User not found");
+  }
+
+  res.json({ subscription: user.subscription });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateUserSubscription: ctrlWrapper(updateUserSubscription),
 };
