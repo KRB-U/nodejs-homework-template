@@ -105,7 +105,7 @@ const updateUserSubscription = async (req, res) => {
     throw HttpErr(404, "User not found");
   }
 
-  res.json({ subscription: user.subscription });
+  res.json(user);
 };
 
 export default {
