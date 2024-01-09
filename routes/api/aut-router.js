@@ -4,6 +4,7 @@ import {
   authenticate,
   isEmptyBody,
   isValidId,
+  upload,
 } from "../../middleWares/index.js";
 
 import { validateBody } from "../../decorators/validateBody.js";
@@ -19,9 +20,17 @@ const authRouter = express.Router();
 
 authRouter.post(
   "/register",
+  upload.none(),
   isEmptyBody,
   validateBody(userSignupSchema),
   authController.signup
+);
+
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  authController.updAvatar
 );
 
 authRouter.post(

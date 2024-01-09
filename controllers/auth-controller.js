@@ -1,13 +1,16 @@
 import UserModel from "../models/contacts/User.js";
 import bcrypt from "bcrypt";
-
+import path from "path";
 import jwt from "jsonwebtoken";
+import fs from "fs/promises";
+import Jimp from "jimp";
 
 import { HttpErr } from "../helpers/HttpErr.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 import dotenv from "dotenv";
 import { userSchema } from "../models/contacts/User.js";
+import gravatar from "gravatar";
 
 dotenv.config();
 
@@ -17,6 +20,7 @@ const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
+
   const user = await UserModel.findOne({ email });
   if (user) {
     throw HttpErr(409, "Email in use");
@@ -24,9 +28,12 @@ const signup = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, saltUserSignUp);
 
+  const avatarURL = gravatar.url(email);
+
   const newUser = await UserModel.create({
     ...req.body,
     password: hashPassword,
+    avatarURL,
   });
 
   const { email: emailCreatedNewUser, subscription } = newUser;
@@ -108,10 +115,33 @@ const updateUserSubscription = async (req, res) => {
   res.json(user);
 };
 
+const avatarDir = path.resolve("public", "avatars");
+
+const updAvatar = async (req, res) => {
+  const { _id } = req.user;
+
+  const { path: tempUpload, originalname } = req.file;
+  const uniqueName = `${_id}_${originalname}`;
+  const pathRedirectFile = path.join(avatarDir, uniqueName);
+
+  await fs.rename(tempUpload, pathRedirectFile);
+
+  const avatarURL = path.join("avatars", uniqueName);
+  await UserModel.findByIdAndUpdate(_id, { avatarURL });
+
+  const image = await Jimp.read(pathRedirectFile);
+  await image.resize(250, 250).writeAsync(pathRedirectFile);
+
+  res.json({
+    avatarURL,
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateUserSubscription: ctrlWrapper(updateUserSubscription),
+  updAvatar: ctrlWrapper(updAvatar),
 };
