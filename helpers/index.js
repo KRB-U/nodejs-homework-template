@@ -1,3 +1,3 @@
 import { HttpErr } from "./HttpErr.js";
-
-export { HttpErr };
+import { sendEmail } from "./sendEmail.js";
+export { HttpErr, sendEmail };

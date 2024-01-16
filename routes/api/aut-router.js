@@ -19,6 +19,14 @@ import authController from "../../controllers/auth-controller.js";
 const authRouter = express.Router();
 
 authRouter.post(
+  "/verify"
+  // upload.none(),
+  // isEmptyBody,
+  // validateBody(userSignupSchema),
+  // authController.verify
+);
+
+authRouter.post(
   "/register",
   upload.none(),
   isEmptyBody,

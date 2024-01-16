@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import UserModel from "../models/contacts/User.js";
 import bcrypt from "bcrypt";
 import path from "path";
@@ -5,7 +6,9 @@ import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import Jimp from "jimp";
 
-import { HttpErr } from "../helpers/HttpErr.js";
+// import { HttpErr } from "../helpers/HttpErr.js";
+import { HttpErr, sendEmail } from "../helpers/index.js";
+
 import { ctrlWrapper } from "../decorators/index.js";
 
 import dotenv from "dotenv";
@@ -16,7 +19,7 @@ dotenv.config();
 
 const saltUserSignUp = 10;
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, BASE_URL } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -30,17 +33,27 @@ const signup = async (req, res) => {
 
   const avatarURL = gravatar.url(email);
 
+  const verificationCode = nanoid();
+
   const newUser = await UserModel.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationCode,
   });
 
   const { email: emailCreatedNewUser, subscription } = newUser;
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email ",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationCode}">Click for verify</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     user: {
-      //   username: newUser.email,
-      //   password: newUser.password,
       email: emailCreatedNewUser,
       subscription,
     },
