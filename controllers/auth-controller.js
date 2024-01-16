@@ -60,6 +60,22 @@ const signup = async (req, res) => {
   });
 };
 
+const verify = async (req, res) => {
+  const { verificationCode } = req.params;
+
+  const user = await UserModel.findOne({ verificationCode });
+  console.log(user);
+  if (!user) {
+    throw HttpErr(404, "User not found");
+  }
+
+  await UserModel.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationCode: "",
+  });
+
+  res.json({ message: "Verification successful" });
+};
 const signin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -67,6 +83,10 @@ const signin = async (req, res) => {
 
   if (!user) {
     throw HttpErr(401, "Email or password is wrong");
+  }
+
+  if (!user.verify) {
+    throw HttpErr(401, "Email not verify");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -157,4 +177,5 @@ export default {
   logout: ctrlWrapper(logout),
   updateUserSubscription: ctrlWrapper(updateUserSubscription),
   updAvatar: ctrlWrapper(updAvatar),
+  verify: ctrlWrapper(verify),
 };

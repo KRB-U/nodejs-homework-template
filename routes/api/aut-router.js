@@ -18,12 +18,12 @@ import authController from "../../controllers/auth-controller.js";
 
 const authRouter = express.Router();
 
-authRouter.post(
-  "/verify"
+authRouter.get(
+  "/verify/:verificationCode",
   // upload.none(),
   // isEmptyBody,
   // validateBody(userSignupSchema),
-  // authController.verify
+  authController.verify
 );
 
 authRouter.post(
