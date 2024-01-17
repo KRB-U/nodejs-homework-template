@@ -12,17 +12,19 @@ import { validateBody } from "../../decorators/validateBody.js";
 import {
   userSigninSchema,
   userSignupSchema,
+  userEmailSchema,
 } from "../../schemes/user-schema.js";
 
 import authController from "../../controllers/auth-controller.js";
 
 const authRouter = express.Router();
 
-authRouter.get(
-  "/verify/:verificationCode",
-  // upload.none(),
-  // isEmptyBody,
-  // validateBody(userSignupSchema),
+authRouter.get("/verify/:verificationCode", authController.verify);
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  validateBody(userEmailSchema),
   authController.verify
 );
 

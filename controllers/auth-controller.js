@@ -64,7 +64,6 @@ const verify = async (req, res) => {
   const { verificationCode } = req.params;
 
   const user = await UserModel.findOne({ verificationCode });
-  console.log(user);
   if (!user) {
     throw HttpErr(404, "User not found");
   }
@@ -76,6 +75,30 @@ const verify = async (req, res) => {
 
   res.json({ message: "Verification successful" });
 };
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await UserModel.findOne({ email });
+
+  if (!user) {
+    throw HttpErr(404, "Email not found");
+  }
+
+  if (!user.verify) {
+    throw HttpErr(400, "Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email ",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationCode}">Click for verify</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.json({ message: "Verification email sent" });
+};
+
 const signin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -178,4 +201,5 @@ export default {
   updateUserSubscription: ctrlWrapper(updateUserSubscription),
   updAvatar: ctrlWrapper(updAvatar),
   verify: ctrlWrapper(verify),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };

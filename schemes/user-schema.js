@@ -23,3 +23,10 @@ export const userSigninSchema = Joi.object({
     "any.required": "missed required password field",
   }),
 });
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    "string.empty": "email не повинен бути порожнім",
+    "any.required": "missed required email field",
+  }),
+});
