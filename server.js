@@ -8,7 +8,7 @@ import app from "./app.js";
 //   "mongodb+srv://user-test:xzHmucx8gbL7wmC7@cluster0.tkmkwho.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 // console.log(process.env.DB_HOST);
-const { DB_HOST, PORT = 3002 } = process.env;
+const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose
   .connect(DB_HOST)
