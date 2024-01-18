@@ -84,7 +84,7 @@ const resendVerifyEmail = async (req, res) => {
     throw HttpErr(404, "Email not found");
   }
 
-  if (!user.verify) {
+  if (user.verify) {
     throw HttpErr(400, "Verification has already been passed");
   }
 
