@@ -19,7 +19,7 @@ dotenv.config();
 
 const saltUserSignUp = 10;
 
-const { JWT_SECRET, BASE_URL } = process.env;
+const { JWT_SECRET, BASE_URL, FRONT_BASE_URL } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -152,6 +152,43 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const forgetPassword = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await UserModel.findOne({ email });
+
+  if (!user) {
+    throw HttpErr(404, "user not found");
+  }
+
+  const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "22h" });
+
+  const sendEmailOptions = {
+    to: email,
+    subject: "forget password",
+    html: `<a target="_blank" href="${FRONT_BASE_URL}/forgPassword.html?token=${token}">Click for recovery password</a>`,
+  };
+
+  sendEmail(sendEmailOptions);
+
+  res.json({ message: "success" });
+};
+
+const recoveryPassword = async (req, res) => {
+  const { authorization: token } = req.headers;
+
+  const { id } = jwt.verify(token, JWT_SECRET);
+
+  if (!id) {
+    throw HttpErr(403, "ivalid token");
+  }
+
+  const user = await UserModel.findOne({ _id: id });
+
+  // res.json({ message: "success" });
+  res.redirect(`${FRONT_BASE_URL}/loginForm.html`);
+};
+
 const updateUserSubscription = async (req, res) => {
   const { subscription } = req.body;
   const { _id } = req.user;
@@ -202,4 +239,6 @@ export default {
   updAvatar: ctrlWrapper(updAvatar),
   verify: ctrlWrapper(verify),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+  forgetPassword: ctrlWrapper(forgetPassword),
+  recoveryPassword: ctrlWrapper(recoveryPassword),
 };

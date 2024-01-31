@@ -13,6 +13,7 @@ import {
   userSigninSchema,
   userSignupSchema,
   userEmailSchema,
+  userForgetPasswordSchema,
 } from "../../schemes/user-schema.js";
 
 import authController from "../../controllers/auth-controller.js";
@@ -59,5 +60,13 @@ authRouter.patch(
   authenticate,
   authController.updateUserSubscription
 );
+
+authRouter.post(
+  "/password/forget",
+  validateBody(userForgetPasswordSchema),
+  authController.forgetPassword
+);
+
+authRouter.patch("/password/recovery", authController.recoveryPassword);
 
 export default authRouter;
