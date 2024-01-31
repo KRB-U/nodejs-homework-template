@@ -177,15 +177,18 @@ const forgetPassword = async (req, res) => {
 const recoveryPassword = async (req, res) => {
   const { authorization: token } = req.headers;
 
-  const { id } = jwt.verify(token, JWT_SECRET);
+  const { id: _id } = jwt.verify(token, JWT_SECRET);
 
-  if (!id) {
+  if (!_id) {
     throw HttpErr(403, "ivalid token");
   }
 
-  const user = await UserModel.findOne({ _id: id });
+  const hashPwd = await bcrypt.hash(req.body.password, 10);
 
-  // res.json({ message: "success" });
+  const user = await UserModel.findByIdAndUpdate(_id, {
+    password: hashPwd,
+  });
+
   res.redirect(`${FRONT_BASE_URL}/loginForm.html`);
 };
 
