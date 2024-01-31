@@ -189,7 +189,7 @@ const recoveryPassword = async (req, res) => {
     password: hashPwd,
   });
 
-  res.redirect(`${FRONT_BASE_URL}/loginForm.html`);
+  return res.status(302).redirect(`${FRONT_BASE_URL}/loginForm.html`);
 };
 
 const updateUserSubscription = async (req, res) => {
